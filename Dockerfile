@@ -37,7 +37,7 @@ COPY start.sh /app/start.sh
 
 COPY crontab /etc/cron.d/my-crontab
 
-RUN chmod +x /app/script.sh
+RUN chmod +x /app/start.sh
 
 RUN touch /var/log/cron.log
 
