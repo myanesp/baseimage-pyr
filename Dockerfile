@@ -7,6 +7,7 @@ RUN apt-get clean all && \
         git \
         curl \
         wget \
+		cron \
 		libhdf5-dev \
 		libcurl4-gnutls-dev \
 		libssl-dev \
