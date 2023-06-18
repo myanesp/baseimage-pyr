@@ -31,7 +31,7 @@ RUN pip3 install --no-cache-dir \
     requests \
     beautifulsoup4
 
-RUN Rscript -e "install.packages(c('readr', 'dplyr', 'tidytext', 'lubridate', 'stringr', 'stringi'))"
+RUN Rscript -e "install.packages(c('readr', 'shiny', 'shinydashboard', 'tidyr', 'dplyr', 'tidytext', 'lubridate', 'stringr', 'stringi', 'stringdist'))"
 
 COPY start.sh /app/start.sh
 
@@ -42,3 +42,5 @@ RUN chmod +x /app/start.sh
 RUN touch /var/log/cron.log
 
 CMD cron && tail -f /var/log/cron.log
+
+EXPOSE 3838
