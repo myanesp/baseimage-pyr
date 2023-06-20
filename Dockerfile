@@ -16,6 +16,7 @@ RUN apt-get clean all && \
 		libxt-dev \
 		zlib1g-dev \
 		libbz2-dev \
+		libgdal-dev \
 		liblzma-dev \
 		libglpk40 \
 		libgit2-dev \
@@ -32,7 +33,9 @@ RUN pip3 install --no-cache-dir \
     requests \
     beautifulsoup4
 
-RUN Rscript -e "install.packages(c('readr', 'shiny', 'shinydashboard', 'tidyr', 'dplyr', 'tidytext', 'lubridate', 'stringr', 'stringi', 'stringdist'))"
+RUN Rscript -e "install.packages(c('readr', 'shiny', 'shinydashboard', 'ggplot2', 'plotly', 'tidyr', 'dplyr', 'leaflet', 'tidytext', 'lubridate', 'stringr', 'stringi', 'stringdist'))"
+
+# RUN touch /var/run/crond.pid && chmod 644 /var/run/crond.pid
 
 COPY start.sh /app/start.sh
 
