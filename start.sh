@@ -2,36 +2,44 @@
 
 log_file="./log.txt"
 
-if curl --output /dev/null --silent --fail "http://localhost:8080"; then
+if curl --output /dev/null --silent --fail "http://nitter:8080"; then
     echo "Nitter instance is running."
 
     echo "$(date +"%Y-%m-%d %H:%M:%S") - Nitter instance is running." >> "$log_file"
     
     # Python script
     echo "Downloading tweets from CercaniasMadrid account..."
-    python harvesting/download_tweets_and_replies.py
-    
-    echo "$(date +"%Y-%m-%d %H:%M:%S") - Tweets downloaded succesfully." >> "$log_file"
+    if python3 harvesting/download_tweets_and_replies.py; then
+        echo "$(date +"%Y-%m-%d %H:%M:%S") - Tweets downloaded successfully." >> "$log_file"
+    else
+        echo "$(date +"%Y-%m-%d %H:%M:%S") - Error occurred while downloading tweets." >> "$log_file"
+    fi
     
     sleep 10
     
     # R scripts
     echo "Executing R scripts..."
-    Rscript processing/02-add_missing_tweets_days.R
-    
-    echo "$(date +"%Y-%m-%d %H:%M:%S") - tweets added successfully." >> "$log_file"
+    if Rscript processing/02-add_missing_tweets_days.R; then
+        echo "$(date +"%Y-%m-%d %H:%M:%S") - Tweets added successfully." >> "$log_file"
+    else
+        echo "$(date +"%Y-%m-%d %H:%M:%S") - Error occurred while adding tweets." >> "$log_file"
+    fi
     
     sleep 5
     
-    Rscript processing/03-finding-issues.R
-    
-    echo "$(date +"%Y-%m-%d %H:%M:%S") - exported tweets with issues successfully." >> "$log_file"
+    if Rscript processing/03-finding-issues.R; then
+        echo "$(date +"%Y-%m-%d %H:%M:%S") - Exported tweets with issues successfully." >> "$log_file"
+    else
+        echo "$(date +"%Y-%m-%d %H:%M:%S") - Error occurred while exporting tweets with issues." >> "$log_file"
+    fi
 
     sleep 5
 
-    Rscript visualization/app.R 
-
-    echo "$(date +"%Y-%m-%d %H:%M:%S") - Shiny dashboard launched successfully." >> "$log_file"
+    if Rscript visualization/app.R; then
+        echo "$(date +"%Y-%m-%d %H:%M:%S") - Shiny dashboard launched successfully." >> "$log_file"
+    else
+        echo "$(date +"%Y-%m-%d %H:%M:%S") - Error occurred while launching Shiny dashboard." >> "$log_file"
+    fi
 
     sleep 5
     
@@ -42,6 +50,7 @@ else
 
     echo "$(date +"%Y-%m-%d %H:%M:%S") - Nitter instance is not running." >> "$log_file"
 fi
+
 
 
 
