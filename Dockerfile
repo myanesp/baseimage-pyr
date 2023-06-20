@@ -1,25 +1,25 @@
-FROM debian:bullseye-20230612-slim
+FROM rocker/r-ver
 
 RUN apt-get clean all && \
 	apt-get update && \
 	apt-get upgrade -y && \
 	apt-get install -y \
-        git \
-        curl \
-        wget \
-		cron \
-		libhdf5-dev \
-		libcurl4-gnutls-dev \
-		libssl-dev \
-		libxml2-dev \
-		libpng-dev \
-		libxt-dev \
-		zlib1g-dev \
-		libbz2-dev \
-		libgdal-dev \
-		liblzma-dev \
-		libglpk40 \
-		libgit2-dev \
+	git \
+	curl \
+	wget \
+	cron \
+	libhdf5-dev \
+	libcurl4-gnutls-dev \
+	libssl-dev \
+	libxml2-dev \
+	libpng-dev \
+	libxt-dev \
+	zlib1g-dev \
+	libbz2-dev \
+	libgdal-dev \
+	liblzma-dev \
+	libglpk40 \
+	libgit2-dev \
         python3 \
         python3-pip \
         r-base \
@@ -27,13 +27,15 @@ RUN apt-get clean all && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install --no-cache-dir \
+RUN pip3 install --upgrade pip && pip3 install --no-cache-dir \
     git+https://github.com/JustAnotherArchivist/snscrape.git \
     pandas \
     requests \
     beautifulsoup4
 
-RUN Rscript -e "install.packages(c('readr', 'shiny', 'shinydashboard', 'ggplot2', 'plotly', 'tidyr', 'dplyr', 'leaflet', 'tidytext', 'lubridate', 'stringr', 'stringi', 'stringdist'))"
+RUN Rscript -e "install.packages(c('dplyr', 'leaflet', 'tidytext', 'lubridate', 'stringr', 'stringi', 'stringdist'))"
+
+RUN Rscript -e "install.packages(c('readr', 'shiny', 'shinydashboard', 'ggplot2', 'plotly', 'tidyr'))"
 
 # RUN touch /var/run/crond.pid && chmod 644 /var/run/crond.pid
 
