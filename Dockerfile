@@ -37,13 +37,15 @@ RUN Rscript -e "install.packages(c('dplyr', 'leaflet', 'tidytext', 'lubridate', 
 
 RUN Rscript -e "install.packages(c('readr', 'shiny', 'shinydashboard', 'ggplot2', 'plotly', 'tidyr'))"
 
-# RUN touch /var/run/crond.pid && chmod 644 /var/run/crond.pid
-
 COPY start.sh /app/start.sh
 
-COPY crontab /etc/cron.d/my-crontab
+RUN chmod +x /app/start.sh && chmod 0744 /app/start.sh
 
-RUN chmod +x /app/start.sh
+RUN touch /var/run/crond.pid && chmod 0644 /var/run/crond.pid
+
+COPY crontab /etc/cron.d/crontab
+
+RUN chmod 0644 /etc/cron.d/crontab
 
 RUN touch /var/log/cron.log
 
