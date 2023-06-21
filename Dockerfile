@@ -49,6 +49,6 @@ RUN chmod 0644 /etc/cron.d/crontab
 
 RUN touch /var/log/cron.log
 
-CMD cron && tail -f /var/log/cron.log
+CMD /app/start.sh && cron && tail -f /var/log/cron.log
 
 EXPOSE 3838

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-log_file="./log.txt"
+log_file="./app/log.txt"
 
 if curl --output /dev/null --silent --fail "http://nitter:8080"; then
     echo "Nitter instance is running."
@@ -9,7 +9,7 @@ if curl --output /dev/null --silent --fail "http://nitter:8080"; then
     
     # Python script
     echo "Downloading tweets from CercaniasMadrid account..."
-    if python3 harvesting/download_tweets_and_replies.py; then
+    if python3 /app/harvesting/download_tweets_and_replies.py; then
         echo "$(date +"%Y-%m-%d %H:%M:%S") - Tweets downloaded successfully." >> "$log_file"
     else
         echo "$(date +"%Y-%m-%d %H:%M:%S") - Error occurred while downloading tweets." >> "$log_file"
@@ -19,7 +19,7 @@ if curl --output /dev/null --silent --fail "http://nitter:8080"; then
     
     # R scripts
     echo "Executing R scripts..."
-    if Rscript processing/02-add_missing_tweets_days.R; then
+    if Rscript /app/processing/02-add_missing_tweets_days.R; then
         echo "$(date +"%Y-%m-%d %H:%M:%S") - Tweets added successfully." >> "$log_file"
     else
         echo "$(date +"%Y-%m-%d %H:%M:%S") - Error occurred while adding tweets." >> "$log_file"
@@ -27,7 +27,7 @@ if curl --output /dev/null --silent --fail "http://nitter:8080"; then
     
     sleep 5
     
-    if Rscript processing/03-finding-issues.R; then
+    if Rscript /app/processing/03-finding-issues.R; then
         echo "$(date +"%Y-%m-%d %H:%M:%S") - Exported tweets with issues successfully." >> "$log_file"
     else
         echo "$(date +"%Y-%m-%d %H:%M:%S") - Error occurred while exporting tweets with issues." >> "$log_file"
@@ -35,7 +35,7 @@ if curl --output /dev/null --silent --fail "http://nitter:8080"; then
 
     sleep 5
 
-    if Rscript visualization/app.R; then
+    if Rscript /app/visualization/app.R; then
         echo "$(date +"%Y-%m-%d %H:%M:%S") - Shiny dashboard launched successfully." >> "$log_file"
     else
         echo "$(date +"%Y-%m-%d %H:%M:%S") - Error occurred while launching Shiny dashboard." >> "$log_file"
